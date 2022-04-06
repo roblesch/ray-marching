@@ -17,5 +17,4 @@ public:
     double radius{};
 };
 
-
 #endif

@@ -21,5 +21,4 @@ public:
     vec3 albedo;
 };
 
-
 #endif //MATERIAL_H

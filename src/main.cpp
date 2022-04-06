@@ -11,15 +11,15 @@ using std::make_shared;
 
 void write_color(std::ostream &out, vec3 pixel_color) {
     // Write the translated [0,255] value of each color component.
-    out << static_cast<int>(255.999 * pixel_color.x()) << ' '
-        << static_cast<int>(255.999 * pixel_color.y()) << ' '
-        << static_cast<int>(255.999 * pixel_color.z()) << '\n';
+    out << static_cast<int>(255.999 * pixel_color.x) << ' '
+        << static_cast<int>(255.999 * pixel_color.y) << ' '
+        << static_cast<int>(255.999 * pixel_color.z) << '\n';
 }
 
 int main() {
 
     // Image
-    const auto aspect_ratio = 16.0 / 9.0;
+    const auto aspect_ratio = 1;
     const int image_width = 400;
     const int image_height = static_cast<int>(image_width / aspect_ratio);
 
@@ -37,12 +37,10 @@ int main() {
     // Scene
 
     scene world;
-    auto s1 = make_shared<sphere>(vec3(0,0,-1), 0.5, make_shared<flat>());
-    auto s2 = make_shared<sphere>(vec3(-1,0,-1), 0.5, make_shared<flat>());
-    auto s3 = make_shared<sphere>(vec3(1,0,-1), 0.5, make_shared<flat>());
+    auto s1 = make_shared<sphere>(vec3(-0.5,0,-2), 0.5, make_shared<flat>());
+    auto s2 = make_shared<sphere>(vec3(0.5, 0, -2), 0.5, make_shared<flat>());
     world.add(s1);
     world.add(s2);
-    world.add(s3);
 
     // Render
 
@@ -61,7 +59,6 @@ int main() {
     }
 
     std::cerr << "\nDone.\n";
-
     ofs.close();
 
 #if defined(_WIN32)
