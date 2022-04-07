@@ -11,9 +11,9 @@ using std::make_shared;
 
 void write_color(std::ostream &out, vec3 pixel_color) {
     // Write the translated [0,255] value of each color component.
-    out << static_cast<int>(255.999 * pixel_color.x) << ' '
-        << static_cast<int>(255.999 * pixel_color.y) << ' '
-        << static_cast<int>(255.999 * pixel_color.z) << '\n';
+    out << static_cast<int>(255.999 * pixel_color.x()) << ' '
+        << static_cast<int>(255.999 * pixel_color.y()) << ' '
+        << static_cast<int>(255.999 * pixel_color.z()) << '\n';
 }
 
 scene diffuse_scene() {
@@ -34,7 +34,7 @@ scene diffuse_scene() {
 
     auto s1 = make_shared<sphere>(
             vec3(-1.1,0,-2), 0.5,
-            make_shared<flat>());
+            make_shared<flat>(vec3(0.2, 0.5, 0.1)));
     auto s2 = make_shared<sphere>(
             vec3(0, 0, -2), 0.5,
             make_shared<normals>());

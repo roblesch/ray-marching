@@ -2,12 +2,13 @@
 
 vec3 flat::color(const ray& r, double t, vec3 N, std::vector<light> lights) const {
     // Flat color
+    albedo;
     return albedo;
 }
 
 vec3 normals::color(const ray& r, double t, vec3 N, std::vector<light> lights) const {
     // Color as a function of surface normal
-    return 0.5*vec3(N.x+1, N.y+1, N.z+1);
+    return 0.5*vec3(N.x()+1, N.y()+1, N.z()+1);
 }
 
 vec3 diffuse::color(const ray& r, double t, vec3 N, std::vector<light> lights) const {

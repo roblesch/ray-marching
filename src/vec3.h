@@ -9,11 +9,9 @@ using std::sqrt;
 
 class vec3 {
 public:
-    vec3() : e{0,0,0},
-        x(e[0]), y(e[1]), z(e[2]),
-        r(e[0]), g(e[1]), b(e[2]) {};
+    vec3() : e{0,0,0} {};
 
-    vec3(double e0, double e1, double e2) : vec3() {
+    vec3(double e0, double e1, double e2) {
         e[0] = e0;
         e[1] = e1;
         e[2] = e2;
@@ -26,11 +24,27 @@ public:
         return *this;
     }
 
-    vec3 operator-() const { return {-e[0], -e[1], -e[2]}; }
+    double x() const { return e[0]; }
+    double y() const { return e[1]; }
+    double z() const { return e[2]; }
+
+    void x(double d) { e[0] = d; }
+    void y(double d) { e[1] = d; }
+    void z(double d) { e[2] = d; }
+
+    double r() const { return e[0]; }
+    double g() const { return e[1]; }
+    double b() const { return e[2]; }
+
+    void r(double d) { e[0] = d; }
+    void g(double d) { e[1] = d; }
+    void b(double d) { e[2] = d; }
 
     double operator[](int i) const { return e[i]; }
 
     double &operator[](int i) { return e[i]; }
+
+    vec3 operator-() const { return {-e[0], -e[1], -e[2]}; }
 
     vec3 &operator+=(const vec3 &v) {
         e[0] += v.e[0];
@@ -64,8 +78,6 @@ public:
 
 public:
     double e[3];
-    double &r, &g, &b;
-    double &x, &y, &z;
 };
 
 // vec3 Utility Functions
@@ -115,9 +127,9 @@ inline vec3 normalize(vec3 v) {
 }
 
 inline void vclamp(vec3 &v) {
-    v.x = clamp(v.x);
-    v.y = clamp(v.y);
-    v.z = clamp(v.z);
+    v.x(clamp(v.x()));
+    v.y(clamp(v.y()));
+    v.z(clamp(v.z()));
 }
 
 #endif

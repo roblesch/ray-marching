@@ -10,7 +10,7 @@
 class flat : public material {
 public:
     flat(): albedo(vec3::random()) {};
-    explicit flat(vec3 alb): albedo(alb) {};
+    explicit flat(const vec3& alb): albedo(alb) {};
     vec3 color(const ray& r, double t, vec3 N, std::vector<light> lights) const override;
 
 public:
