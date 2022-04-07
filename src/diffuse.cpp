@@ -2,7 +2,6 @@
 
 vec3 flat::color(const ray& r, double t, vec3 N, std::vector<light> lights) const {
     // Flat color
-    albedo;
     return albedo;
 }
 

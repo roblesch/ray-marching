@@ -8,6 +8,9 @@
 #include "sphere.h"
 
 void write_color(std::ostream &out, vec3 pixel_color) {
+    // Clamp color to (0.0, 1.0)
+    vclamp(pixel_color);
+
     // Write the translated [0,255] value of each color component.
     out << static_cast<int>(255.999 * pixel_color.x()) << ' '
         << static_cast<int>(255.999 * pixel_color.y()) << ' '
