@@ -6,10 +6,15 @@
 
 class sphere : public surface {
 public:
-    sphere(vec3 cen, double r, shared_ptr<material> m) : surface(std::move(m)), center(cen), radius(r) {};
+    sphere(const vec3& cen, double r, shared_ptr<material> m) :
+        surface(std::move(m)), center(cen), radius(r) {};
 
-    double distance(vec3 p) const override {
+    double distance(const vec3& p) const override {
         return (p - center).length() - radius;
+    };
+
+    vec3 normal(const vec3& p) const override {
+        return normalize(p - center);
     };
 
 public:

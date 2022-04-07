@@ -2,7 +2,7 @@
 #include <fstream>
 
 #include "common.h"
-#include "material.h"
+#include "diffuse.h"
 #include "scene.h"
 #include "sphere.h"
 
@@ -16,9 +16,42 @@ void write_color(std::ostream &out, vec3 pixel_color) {
         << static_cast<int>(255.999 * pixel_color.z) << '\n';
 }
 
+scene diffuse_scene() {
+    // 3 spheres with flat, normals, and diffuse shading
+    scene world;
+
+    world.add_light(light(
+            vec3(1,1,1),
+            vec3(0.3,0.3,0.3)));
+    world.add_light(light(
+            vec3(-1,1,1),
+            vec3(0.4,0.4,0.4)));
+
+    auto d1 = make_shared<diffuse>(
+            vec3(0.8,0.2,0.2),
+            vec3(0.6,0.2,0.2),
+            vec3(0.2,0.2,0.2));
+
+    auto s1 = make_shared<sphere>(
+            vec3(-1.1,0,-2), 0.5,
+            make_shared<flat>());
+    auto s2 = make_shared<sphere>(
+            vec3(0, 0, -2), 0.5,
+            make_shared<normals>());
+    auto s3 = make_shared<sphere>(
+            vec3(1.1, 0, -2), 0.5, d1);
+
+    world.add_surface(s1);
+    world.add_surface(s2);
+    world.add_surface(s3);
+
+    return world;
+}
+
 int main() {
 
     // Image
+
     const auto aspect_ratio = 1;
     const int image_width = 400;
     const int image_height = static_cast<int>(image_width / aspect_ratio);
@@ -36,11 +69,7 @@ int main() {
 
     // Scene
 
-    scene world;
-    auto s1 = make_shared<sphere>(vec3(-0.5,0,-2), 0.5, make_shared<flat>());
-    auto s2 = make_shared<sphere>(vec3(0.5, 0, -2), 0.5, make_shared<flat>());
-    world.add(s1);
-    world.add(s2);
+    scene world = diffuse_scene();
 
     // Render
 

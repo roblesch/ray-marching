@@ -1,24 +1,15 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
+#include <vector>
+
 #include "common.h"
+#include "light.h"
+#include "surface.h"
 
 class material {
 public:
-    virtual vec3 color(const ray &r, double t) const = 0;
-};
-
-class flat : public material {
-public:
-    flat(): albedo(vec3::random()) {};
-    explicit flat(vec3 alb): albedo(alb) {};
-
-    vec3 color(const ray &r, double t) const override {
-        return albedo;
-    }
-
-public:
-    vec3 albedo;
+    virtual vec3 color(const ray &r, double t, vec3 N, std::vector<light> lights) const = 0;
 };
 
 #endif //MATERIAL_H

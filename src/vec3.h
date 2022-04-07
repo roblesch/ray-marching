@@ -22,8 +22,8 @@ public:
     vec3& operator=(const vec3 &rhs) {
         if (&rhs != this) {
             std::copy_n(rhs.e, 3, e);
-            return *this;
         }
+        return *this;
     }
 
     vec3 operator-() const { return {-e[0], -e[1], -e[2]}; }
@@ -59,11 +59,7 @@ public:
     }
 
     inline static vec3 random() {
-        return {
-            rand() / (RAND_MAX + 1.0),
-            rand() / (RAND_MAX + 1.0),
-            rand() / (RAND_MAX + 1.0)
-        };
+        return { drand(), drand(), drand() };
     }
 
 public:
@@ -114,8 +110,14 @@ inline vec3 cross(const vec3 &u, const vec3 &v) {
             u.e[0] * v.e[1] - u.e[1] * v.e[0]};
 }
 
-inline vec3 unit_vector(vec3 v) {
+inline vec3 normalize(vec3 v) {
     return v / v.length();
+}
+
+inline void vclamp(vec3 &v) {
+    v.x = clamp(v.x);
+    v.y = clamp(v.y);
+    v.z = clamp(v.z);
 }
 
 #endif
