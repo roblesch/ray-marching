@@ -5,6 +5,7 @@
 #include <memory>
 
 using std::shared_ptr;
+using std::make_shared;
 
 inline double clamp(double d, double max=1.0, double min=0.0) {
     // Clamp a double to a max and min

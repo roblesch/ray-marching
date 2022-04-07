@@ -6,9 +6,6 @@
 #include "scene.h"
 #include "sphere.h"
 
-using std::shared_ptr;
-using std::make_shared;
-
 void write_color(std::ostream &out, vec3 pixel_color) {
     // Write the translated [0,255] value of each color component.
     out << static_cast<int>(255.999 * pixel_color.x()) << ' '
