@@ -37,8 +37,8 @@ bool scene::march(const ray& r, hit_record& rec) {
 }
 
 vec3 scene::ray_color(const ray& r) {
-    // Return the color of a surface at the ray intersection if it
-    // hits, otherwise return the color of the background
+    // Return the color of a surface at the ray intersection if it hits,
+    // otherwise return the color of the background
     hit_record rec;
     if (march(r, rec))
         return rec.mat_ptr->color(r, rec.t, rec.N, lights);

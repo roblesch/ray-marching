@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 
+#include "camera.h"
 #include "common.h"
 #include "diffuse.h"
 #include "scene.h"
@@ -47,39 +48,26 @@ scene diffuse_scene() {
 
 int main() {
 
-    // Image
-
-    const auto aspect_ratio = 1;
-    const int image_width = 400;
-    const int image_height = static_cast<int>(image_width / aspect_ratio);
-
     // Camera
-
-    auto viewport_height = 2.0;
-    auto viewport_width = aspect_ratio * viewport_height;
-    auto focal_length = 1.0;
-
-    auto origin = vec3(0, 0, 0);
-    auto horizontal = vec3(viewport_width, 0, 0);
-    auto vertical = vec3(0, viewport_height, 0);
-    auto lower_left_corner = origin - horizontal/2 - vertical/2 - vec3(0, 0, focal_length);
+    camera cam(aspect_ratio);
 
     // Scene
-
     scene world = diffuse_scene();
 
     // Render
-
     std::ofstream ofs("image.ppm");
     ofs << "P3\n" << image_width << ' ' << image_height << "\n255\n";
-
     for (int j = image_height-1; j >= 0; --j) {
         std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
         for (int i = 0; i < image_width; ++i) {
-            auto u = double(i) / (image_width-1);
-            auto v = double(j) / (image_height-1);
-            ray r(origin, lower_left_corner + u*horizontal + v*vertical - origin);
-            vec3 pixel_color = world.ray_color(r);
+            vec3 pixel_color;
+            for (int s = 0; s < rays_per_pixel; s++) {
+                auto u = (i + drand()) / (image_width-1);
+                auto v = (j + drand()) / (image_height-1);
+                ray r = cam.get_ray(u, v);
+                pixel_color += world.ray_color(r);
+            }
+            pixel_color /= rays_per_pixel;
             write_color(ofs, pixel_color);
         }
     }
@@ -92,4 +80,5 @@ int main() {
 #elif defined(__APPLE__)
     system("open image.ppm");
 #endif
+
 }
