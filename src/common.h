@@ -12,7 +12,7 @@ const int image_width = 400;
 const int image_height = static_cast<int>(image_width / aspect_ratio);
 
 // Anti aliasing
-const int rays_per_pixel = 16;
+const int rays_per_pixel = 100;
 
 /* === */
 
@@ -24,7 +24,7 @@ inline double clamp(double d, double max=1.0, double min=0.0) {
     return d > max ? max : (d < min ? min : d);
 }
 
-inline double drand() {
+inline double random_double() {
     // Return a random double (0.0, 1.0)
     return rand() / (RAND_MAX + 1.0);
 }

@@ -62,8 +62,8 @@ int main() {
         for (int i = 0; i < image_width; ++i) {
             vec3 pixel_color;
             for (int s = 0; s < rays_per_pixel; s++) {
-                auto u = (i + drand()) / (image_width-1);
-                auto v = (j + drand()) / (image_height-1);
+                auto u = (i + random_double()) / (image_width - 1);
+                auto v = (j + random_double()) / (image_height - 1);
                 ray r = cam.get_ray(u, v);
                 pixel_color += world.ray_color(r);
             }

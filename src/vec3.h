@@ -73,7 +73,7 @@ public:
     }
 
     inline static vec3 random() {
-        return { drand(), drand(), drand() };
+        return {random_double(), random_double(), random_double() };
     }
 
 public:
