@@ -29,9 +29,11 @@ scene diffuse_scene() {
             vec3(0.4,0.4,0.4)));
 
     auto d1 = make_shared<diffuse>(
-            vec3(0.8,0.2,0.2),
-            vec3(0.6,0.2,0.2),
-            vec3(0.2,0.2,0.2));
+            vec3(0.3,0.1,0.1),
+            vec3(0.9,0.2,0.2),
+            vec3(0.4, 0.4, 0.4),
+            vec3(0.2,0.2,0.2),
+            16);
 
     auto s1 = make_shared<sphere>(
             vec3(-1.1,0,-2), 0.5,
@@ -49,15 +51,8 @@ scene diffuse_scene() {
     return world;
 }
 
-int main() {
-
-    // Camera
-    camera cam(aspect_ratio);
-
-    // Scene
-    scene world = diffuse_scene();
-
-    // Render
+void render_scene(camera cam, scene world) {
+    // Render the scene and write to image.ppm
     std::ofstream ofs("image.ppm");
     ofs << "P3\n" << image_width << ' ' << image_height << "\n255\n";
     for (int j = image_height-1; j >= 0; --j) {
@@ -74,9 +69,24 @@ int main() {
             write_color(ofs, pixel_color);
         }
     }
-
     std::cerr << "\nDone.\n";
     ofs.close();
+}
+
+void render_scene_parallel(camera cam, scene world) {
+    render_scene(cam, std::move(world));
+}
+
+int main() {
+    // Camera
+    camera cam(aspect_ratio);
+
+    // Scene
+    scene world = diffuse_scene();
+
+    // Render
+    RENDER_PARALLEL ? render_scene_parallel(cam, world)
+                    : render_scene(cam, world);
 
 #if defined(_WIN32)
     system("image.ppm");

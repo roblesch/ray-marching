@@ -13,11 +13,25 @@ vec3 normals::color(const ray& r, double t, vec3 N, std::vector<light> lights) c
 vec3 diffuse::color(const ray& r, double t, vec3 N, std::vector<light> lights) const {
     // Simple diffuse approximation
     vec3 C;
-    double NL;
+
+    vec3 E = -r.direction();
+    double NE = dot(N, E);
 
     for (const light &l : lights) {
-        NL = dot(N, l.L);
-        C += Kd*l.le*NL;
+        double NL = dot(N, l.L);
+        if (NL * NE < 0) {
+            continue;
+        }
+        if (NL < 0 && NE < 0) {
+            N = -N;
+            NL = dot(N, l.L);
+            NE = dot(N, E);
+        }
+        vec3 R = 2*NL*N - l.L;
+        double RE = dot(R, E);
+        RE = clamp(RE);
+
+        C += Ks*l.le*pow(RE,spec) + Kd*l.le*NL;
     }
 
     C += Ka*la;

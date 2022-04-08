@@ -7,7 +7,7 @@ class ray {
 public:
     ray() = default;
     ray(const vec3& origin, const vec3& direction)
-            : orig(origin), dir(direction)
+            : orig(origin), dir(normalize(direction))
     {};
 
     vec3 origin() const  { return orig; }
