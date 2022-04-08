@@ -8,6 +8,10 @@ class material;
 
 class surface {
 public:
+    /***
+     * m - surface's material
+     * p - point of intersection
+     */
     explicit surface(shared_ptr<material> m): mat_ptr(std::move(m)) {}
     virtual double distance(const vec3& p) const = 0;
     virtual vec3 normal(const vec3& p) const = 0;
