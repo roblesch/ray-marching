@@ -51,10 +51,8 @@ scene diffuse_scene() {
     return world;
 }
 
-void render_scene(camera cam, scene world) {
-    // Render the scene and write to image.ppm
-    std::ofstream ofs("image.ppm");
-    ofs << "P3\n" << image_width << ' ' << image_height << "\n255\n";
+void render_scene(std::ofstream& ofs, camera cam, scene world) {
+    // Render the scene and write to ofs
     for (int j = image_height-1; j >= 0; --j) {
         std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
         for (int i = 0; i < image_width; ++i) {
@@ -70,11 +68,10 @@ void render_scene(camera cam, scene world) {
         }
     }
     std::cerr << "\nDone.\n";
-    ofs.close();
 }
 
-void render_scene_parallel(camera cam, scene world) {
-    render_scene(cam, std::move(world));
+void render_scene_parallel(std::ofstream& ofs, camera cam, scene world) {
+    render_scene(ofs, cam, std::move(world));
 }
 
 int main() {
@@ -85,8 +82,13 @@ int main() {
     scene world = diffuse_scene();
 
     // Render
-    RENDER_PARALLEL ? render_scene_parallel(cam, world)
-                    : render_scene(cam, world);
+    std::ofstream ofs("image.ppm");
+    ofs << "P3\n" << image_width << ' ' << image_height << "\n255\n";
+
+    RENDER_PARALLEL ? render_scene_parallel(ofs, cam, world)
+                    : render_scene(ofs, cam, world);
+
+    ofs.close();
 
 #if defined(_WIN32)
     system("image.ppm");

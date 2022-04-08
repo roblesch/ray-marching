@@ -6,7 +6,7 @@
 class camera {
 public:
     explicit camera(double aspect, const vec3& origin={}) : aspect_ratio(aspect) {};
-    ray get_ray(double u, double v) {
+    ray get_ray(double u, double v) const {
         return { origin, lower_left_corner + u*horizontal + v*vertical - origin };
     }
 
