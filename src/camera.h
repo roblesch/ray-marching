@@ -5,21 +5,37 @@
 
 class camera {
 public:
-    explicit camera(double aspect, const vec3& origin={}) : aspect_ratio(aspect) {};
-    ray get_ray(double u, double v) const {
-        return { origin, lower_left_corner + u*horizontal + v*vertical - origin };
+    camera(
+            vec3 position,
+            vec3 lookat,
+            vec3   vup,
+            double vfov, // vertical field-of-view in degrees
+            double aspect
+    ) {
+        auto theta = degrees_to_radians(vfov);
+        auto h = tan(theta/2);
+        auto viewport_height = 2.0 * h;
+        auto viewport_width = aspect * viewport_height;
+
+        auto w = normalize(position- lookat);
+        auto u = normalize(cross(vup, w));
+        auto v = cross(w, u);
+
+        origin = position;
+        horizontal = viewport_width * u;
+        vertical = viewport_height * v;
+        lower_left_corner = origin - horizontal/2 - vertical/2 - w;
     }
 
-public:
-    double aspect_ratio;
-    double viewport_height = 2.0;
-    double viewport_width = aspect_ratio * viewport_height;
-    double focal_length = 1.0;
+    ray get_ray(double s, double t) const {
+        return { origin, lower_left_corner + s*horizontal + t*vertical - origin };
+    }
 
+private:
     vec3 origin;
-    vec3 horizontal = vec3(viewport_width, 0, 0);
-    vec3 vertical = vec3(0, viewport_height, 0);
-    vec3 lower_left_corner = origin - horizontal/2 - vertical/2 - vec3(0, 0, focal_length);
+    vec3 lower_left_corner;
+    vec3 horizontal;
+    vec3 vertical;
 };
 
 #endif //CAMERA_H

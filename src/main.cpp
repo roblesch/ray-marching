@@ -76,7 +76,8 @@ void render_scene_parallel(std::ofstream& ofs, camera cam, scene world) {
 
 int main() {
     // Camera
-    camera cam(aspect_ratio);
+    camera cam(camera_origin, camera_lookat, camera_up,
+               fov, aspect_ratio);
 
     // Scene
     scene world = diffuse_scene();
