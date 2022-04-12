@@ -13,13 +13,21 @@ public:
         return (p - center).length() - radius;
     };
 
-    vec3 normal(const vec3& p) const override {
-        return normalize(p - center);
-    };
-
 public:
     vec3 center;
     double radius{};
+};
+
+class perturbed_sphere : public sphere {
+public:
+    perturbed_sphere(const vec3& cen, double r, shared_ptr<material> m) : sphere(cen, r, m) {};
+
+    double distance(const vec3& p) const override {
+        double displacement = sin(7.0 * p.x())
+                              * sin(7.0 * p.y())
+                              * sin(7.0 * p.z()) * 0.1;
+        return (p - center).length() - radius + displacement;
+    };
 };
 
 #endif

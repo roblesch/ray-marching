@@ -41,7 +41,7 @@ scene diffuse_scene() {
     auto s2 = make_shared<sphere>(
             vec3(0, 0, -2), 0.5,
             make_shared<normals>());
-    auto s3 = make_shared<sphere>(
+    auto s3 = make_shared<perturbed_sphere>(
             vec3(1.1, 0, -2), 0.5, d1);
 
     world.add_surface(s1);
