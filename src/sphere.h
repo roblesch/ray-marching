@@ -41,6 +41,4 @@ public:
     double ints;
 };
 
-
-
 #endif
