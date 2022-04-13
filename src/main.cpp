@@ -2,6 +2,7 @@
 #include <fstream>
 
 #include "camera.h"
+#include "cloud.h"
 #include "common.h"
 #include "diffuse.h"
 #include "scene.h"
@@ -37,7 +38,7 @@ scene diffuse_scene() {
 
     auto s1 = make_shared<sphere>(
             vec3(-1.1,0,-2), 0.5,
-            make_shared<flat>(vec3(0.2, 0.5, 0.1)));
+            make_shared<cloud>());
     auto s2 = make_shared<sphere>(
             vec3(0, 0, -2), 0.5,
             make_shared<normals>());

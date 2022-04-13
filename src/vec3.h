@@ -11,6 +11,12 @@ class vec3 {
 public:
     vec3() : e{0,0,0} {};
 
+    vec3(double e0) {
+        e[0] = e0;
+        e[1] = e0;
+        e[2] = e0;
+    }
+
     vec3(double e0, double e1, double e2) {
         e[0] = e0;
         e[1] = e1;
@@ -110,6 +116,10 @@ inline vec3 operator/(vec3 v, double t) {
     return (1 / t) * v;
 }
 
+inline vec3 operator/(double t, vec3 v) {
+    return { t / v.x(), t / v.y(), t / v.z() };
+}
+
 inline double dot(const vec3 &u, const vec3 &v) {
     return u.e[0] * v.e[0]
            + u.e[1] * v.e[1]
@@ -130,6 +140,22 @@ inline void vclamp(vec3 &v) {
     v.x(clamp(v.x()));
     v.y(clamp(v.y()));
     v.z(clamp(v.z()));
+}
+
+inline vec3 min(const vec3 &u, const vec3 &v) {
+    return {
+        std::min(u.x(), v.x()),
+        std::min(u.y(), v.y()),
+        std::min(u.z(), v.z())
+    };
+}
+
+inline vec3 max(const vec3 &u, const vec3 &v) {
+    return {
+            std::max(u.x(), v.x()),
+            std::max(u.y(), v.y()),
+            std::max(u.z(), v.z())
+    };
 }
 
 #endif
