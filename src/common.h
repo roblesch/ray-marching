@@ -8,6 +8,9 @@ using std::shared_ptr;
 using std::make_shared;
 
 const double pi = 3.1415926535897932385;
+const int UNION = 0;
+const int SUBTRACT = 1;
+const int INTERSECT = 2;
 
 inline double clamp(double d, double max=1.0, double min=0.0) {
     // Clamp a double to a max and min
@@ -41,7 +44,7 @@ const int image_width = 400;
 const int image_height = static_cast<int>(image_width / aspect_ratio);
 
 // Anti aliasing
-const int rays_per_pixel = 16;
+const int rays_per_pixel = 10;
 
 // Parallelization
 const bool RENDER_PARALLEL = false;

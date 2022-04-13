@@ -15,7 +15,7 @@ public:
      * N - surface normal at intersection
      * lights - vector of directional lights
      */
-    virtual vec3 color(const ray &r, double t, vec3 N, std::vector<light> lights) const = 0;
+    virtual vec3 color(const ray &r, vec3 p, vec3 N, std::vector<light> lights) const = 0;
 };
 
 #endif //MATERIAL_H

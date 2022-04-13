@@ -11,7 +11,7 @@ class flat : public material {
 public:
     flat(): albedo(vec3::random()) {};
     explicit flat(const vec3& alb): albedo(alb) {};
-    vec3 color(const ray& r, double t, vec3 N, std::vector<light> lights) const override;
+    vec3 color(const ray& r, vec3 p, vec3 N, std::vector<light> lights) const override;
 
 public:
     vec3 albedo;
@@ -21,7 +21,7 @@ public:
 class normals : public material {
 public:
     normals() = default;
-    vec3 color(const ray& r, double t, vec3 N, std::vector<light> lights) const override;
+    vec3 color(const ray& r, vec3 p, vec3 N, std::vector<light> lights) const override;
 };
 
 // Diffuse material
@@ -34,7 +34,7 @@ public:
         Ka(mat_ka), Kd(mat_kd), Ks(mat_ks),
         la(l_amb), spec(spower) {};
 
-    vec3 color(const ray& r, double t, vec3 N, std::vector<light> lights) const override;
+    vec3 color(const ray& r, vec3 p, vec3 N, std::vector<light> lights) const override;
 
 public:
     vec3 Ka;
