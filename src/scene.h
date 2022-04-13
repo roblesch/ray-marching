@@ -17,6 +17,7 @@ public:
 
     double distance_estimator(vec3 p);
     bool march(const ray& r, hit_record& rec);
+    vec3 normal(const vec3& p);
     vec3 ray_color(const ray& r);
 
 public:

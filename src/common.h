@@ -41,7 +41,7 @@ const int image_width = 400;
 const int image_height = static_cast<int>(image_width / aspect_ratio);
 
 // Anti aliasing
-const int rays_per_pixel = 16;
+const int rays_per_pixel = 10;
 
 // Parallelization
 const bool RENDER_PARALLEL = false;

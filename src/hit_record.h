@@ -6,7 +6,7 @@
 
 // Stores intersection information
 struct hit_record {
-    double t;
+    vec3 p;
     vec3 N;
     shared_ptr<material> mat_ptr;
 };
