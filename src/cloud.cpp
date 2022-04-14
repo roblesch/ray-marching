@@ -1,16 +1,14 @@
 #include "cloud.h"
 
-double cloud::max_sum = 0.0;
-double cloud::min_sum = 0.0;
-
 vec3 bg_color(const ray& r) {
-    vec3 unit_direction = r.direction();
-    auto t = 0.5*(unit_direction.y() + 1.0);
-    return (1.0-t)*vec3(1.0, 1.0, 1.0) + t*vec3(0.5, 0.7, 1.0);
+    return {0.5, 0.7, 1.0};
+//    vec3 unit_direction = r.direction();
+//    auto t = 0.5*(unit_direction.y() + 1.0);
+//    return (1.0-t)*vec3(1.0, 1.0, 1.0) + t*vec3(0.5, 0.7, 1.0);
 }
 
-vec3 cloud::color(const ray& r, vec3 p, vec3 N, std::vector<light> lights) const {
-    const int n = 4;
+vec3 gardner_cloud::color(const ray& r, vec3 p, vec3 N, std::vector<light> lights) const {
+    const int n = 7;
 
     double X = p.x();
     double Y = p.y();
@@ -22,10 +20,15 @@ vec3 cloud::color(const ray& r, vec3 p, vec3 N, std::vector<light> lights) const
     double PX[n];
     double PY[n];
 
-    FX[0] = 2*pi;
-    FY[0] = pi;
-    C[0] = 1;
-    double To = 1;
+    FX[0] = 2*d;
+    FY[0] = d/2;
+    C[0] = sqrt(d);
+
+//    FX[0] = 3;
+//    FY[0] = 3;
+//    C[0] = 3;
+
+    double To = rand() / RAND_MAX * 100;
 
     for (int i = 1; i < n; i++) {
         FX[i] = 2*FX[i-1];
@@ -45,33 +48,110 @@ vec3 cloud::color(const ray& r, vec3 p, vec3 N, std::vector<light> lights) const
         sum2 += C[i]*sin(FY[i]*Y + PY[i] + To);
     }
 
-    auto sum3 = (sum1*sum2);
-//    double min = -3;
-//    double range = min + 3.56;
-//    auto sum4 = (sum3 + min) / range;
-//
-    cloud::max_sum = sum3 > cloud::max_sum ? sum3 : cloud::max_sum;
-    cloud::min_sum = sum3 < cloud::min_sum ? sum3 : cloud::min_sum;
     auto T = (sum1*sum2 + 2) / 5;
-    if (T < 0) T = 0;
+    if (T < 0.1) T = 0;
     if (T > 1) T = 1;
-    return vec3(T + (1 - T)*bg_color(r));
+
+    double Ka = 0.2;
+    double Kd = 1.0;
+    double Ks = 0.4;
+    double la = 0.2;
+    int spec = 16;
+
+    vec3 E = -r.direction();
+    double NE = dot(N, E);
+
+    double color = 0.0;
+
+    for (const light &l : lights) {
+        double NL = dot(N, l.L);
+        if (NL * NE < 0) {
+            continue;
+        }
+        if (NL < 0 && NE < 0) {
+            N = -N;
+            NL = dot(N, l.L);
+            NE = dot(N, E);
+        }
+        vec3 R = 2*NL*N - l.L;
+        double RE = dot(R, E);
+        RE = clamp(RE);
+
+        color += T*(Ks*l.le.x()*pow(RE,spec) + Kd*l.le.x()*NL);
+    }
+
+    color += T*Ka*la;
+
+    double step_size = d/100;
+    double steps = 0;
+    vec3 at = p + r.dir * step_size;
+    double de = w->distance_estimator(at);
+
+    while (de < 0) {
+        at += r.dir * step_size;
+        de = w->distance_estimator(at);
+        steps++;
+    }
+
+    double dist = steps / (d/step_size);
+    if (dist > 1.0) dist = 1.0;
+
+    double fg = dist * color;
+//    double fg = color;
+
+    return vec3(fg) + (1 - fg)* bg_color(r);
 }
 
-//vec3 cloud::color(const ray& r, vec3 p, vec3 N, std::vector<light> lights) const {
-//    vec3 baseColor = vec3(1);
-//    vec3 acc_rgb = vec3(0.0);
-//    double acc_a = 0.0;
-//
-//    vec3 at = p + r.dir * 0.1;
-//    double de = w->distance_estimator(at);
-//
-//    while (de < 0) {
-//        acc_rgb += 0.01 * baseColor;
-//        acc_a += 0.01;
-//        at += r.dir * 0.01;
-//        de = w->distance_estimator(at);
-//    }
-//
-//    return acc_rgb*acc_a + bg_color(r)*(1 - acc_a);
-//}
+vec3 perlin_cloud::color(const ray& r, vec3 p, vec3 N, std::vector<light> lights) const {
+    double step_size = d/100;
+    double steps = 0;
+    vec3 at = p + r.dir * step_size;
+    double de = w->distance_estimator(at);
+    double nscale = 5;
+    p *= 1.5;
+    double noise = pn->noise(p.x()*nscale, p.y()*nscale, p.z());
+
+//    return vec3(noise) + (1-noise)* bg_color(r);
+
+    while (de < 0) {
+        at += r.dir * step_size;
+        de = w->distance_estimator(at);
+        steps++;
+    }
+
+    double dist = steps / (d/step_size);
+    double fg = dist * dist*dist*dist*dist*noise;
+
+    vec3 Ka(0.2);
+    vec3 Kd(1.0);
+    vec3 Ks(0.4);
+    vec3 la(0.2);
+    int spec = 16;
+
+    vec3 E = -r.direction();
+    double NE = dot(N, E);
+
+    vec3 color(0.0);
+
+    for (const light &l : lights) {
+        double NL = dot(N, l.L);
+        if (NL * NE < 0) {
+            continue;
+        }
+        if (NL < 0 && NE < 0) {
+            N = -N;
+            NL = dot(N, l.L);
+            NE = dot(N, E);
+        }
+        vec3 R = 2*NL*N - l.L;
+        double RE = dot(R, E);
+        RE = clamp(RE);
+
+        color += 3*fg*(Ks*l.le*pow(RE,spec) + Kd*l.le*NL);
+    }
+
+    color += fg*Ka*la;
+    vclamp(color);
+
+    return color + (1 - color.x())* bg_color(r);
+}

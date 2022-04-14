@@ -2,17 +2,28 @@
 #define RAY_MARCHING_CLOUD_H
 
 #include "material.h"
+#include "PerlinNoise.h"
 #include "scene.h"
 
-class cloud : public material {
+class gardner_cloud : public material {
 public:
-    explicit cloud(scene* world) : w(world) {};
+    gardner_cloud(scene* world, double depth) : w(world), d(depth) {};
     vec3 color(const ray& r, vec3 p, vec3 N, std::vector<light> lights) const override;
 
 public:
     scene* w;
-    static double max_sum;
-    static double min_sum;
+    double d;
+};
+
+class perlin_cloud : public material {
+public:
+    perlin_cloud(scene* world, double depth, PerlinNoise* perlin) : w(world), d(depth), pn(perlin) {};
+    vec3 color(const ray& r, vec3 p, vec3 N, std::vector<light> lights) const override;
+
+public:
+    scene* w;
+    double d;
+    PerlinNoise* pn;
 };
 
 #endif //RAY_MARCHING_CLOUD_H

@@ -18,6 +18,36 @@ void write_color(std::ostream &out, vec3 pixel_color) {
         << static_cast<int>(255.999 * pixel_color.z()) << '\n';
 }
 
+scene cloud_scene() {
+    // 1 perturbed cloud sphere
+    scene world;
+
+    world.add_light(light(
+            vec3(1,1,1),
+            vec3(0.3,0.3,0.3)));
+    world.add_light(light(
+            vec3(-1,1,1),
+            vec3(0.4,0.4,0.4)));
+
+    double s1rad = 0.7;
+    double s2rad = 0.7;
+
+    auto pn = new PerlinNoise(rand());
+
+    auto c1 = make_shared<gardner_cloud>(&world, 2*s1rad);
+    auto c2 = make_shared<perlin_cloud>(&world, 2*s2rad, pn);
+
+    auto s1 = make_shared<perlin_sphere>(
+            vec3(-0.9,0, -2), s1rad, pn, c1);
+
+    auto s2 = make_shared<perlin_sphere>(
+            vec3(0.9,0, -2), s2rad, pn, c2);
+
+    world.add_surface(s1);
+    world.add_surface(s2);
+    return world;
+}
+
 scene diffuse_scene() {
     // 3 spheres with flat, normals, and diffuse shading
     scene world;
@@ -37,17 +67,16 @@ scene diffuse_scene() {
             16);
 
     auto s1 = make_shared<sphere>(
-            vec3(0,0, -2), 1.25,
-            make_shared<cloud>(&world));
-//    auto s2 = make_shared<sphere>(
-//            vec3(0, 0, -2), 0.5,
-//            make_shared<normals>());
-//    auto s3 = make_shared<perturbed_sphere>(
-//            vec3(1.1, 0, -2), 0.5, 9.0, 0.11, d1);
+            vec3(-1.1,0, -2), 0.5, make_shared<flat>());
+    auto s2 = make_shared<sphere>(
+            vec3(0, 0, -2), 0.5,
+            make_shared<normals>());
+    auto s3 = make_shared<perturbed_sphere>(
+            vec3(1.1, 0, -2), 0.5, 9.0, 0.11, d1);
 
     world.add_surface(s1);
-//    world.add_surface(s2);
-//    world.add_surface(s3);
+    world.add_surface(s2);
+    world.add_surface(s3);
 
     return world;
 }
@@ -69,8 +98,6 @@ void render_scene(std::ofstream& ofs, camera cam, scene world) {
         }
     }
     std::cerr << "\nDone.\n";
-    std::cout << "max: " << cloud::max_sum << std::endl;
-    std::cout << "min: " << cloud::min_sum << std::endl;
 }
 
 void render_scene_parallel(std::ofstream& ofs, camera cam, scene world) {
@@ -83,7 +110,8 @@ int main() {
                fov, aspect_ratio);
 
     // Scene
-    scene world = diffuse_scene();
+//    scene world = diffuse_scene();
+    scene world = cloud_scene();
 
     // Render
     std::ofstream ofs("image.ppm");
