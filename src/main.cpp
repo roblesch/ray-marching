@@ -37,17 +37,17 @@ scene diffuse_scene() {
             16);
 
     auto s1 = make_shared<sphere>(
-            vec3(-1.1,0,-2), 0.5,
-            make_shared<cloud>());
-    auto s2 = make_shared<sphere>(
-            vec3(0, 0, -2), 0.5,
-            make_shared<normals>());
-    auto s3 = make_shared<perturbed_sphere>(
-            vec3(1.1, 0, -2), 0.5, 9.0, 0.11, d1);
+            vec3(0,0, -2), 1.25,
+            make_shared<cloud>(&world));
+//    auto s2 = make_shared<sphere>(
+//            vec3(0, 0, -2), 0.5,
+//            make_shared<normals>());
+//    auto s3 = make_shared<perturbed_sphere>(
+//            vec3(1.1, 0, -2), 0.5, 9.0, 0.11, d1);
 
     world.add_surface(s1);
-    world.add_surface(s2);
-    world.add_surface(s3);
+//    world.add_surface(s2);
+//    world.add_surface(s3);
 
     return world;
 }
@@ -69,6 +69,8 @@ void render_scene(std::ofstream& ofs, camera cam, scene world) {
         }
     }
     std::cerr << "\nDone.\n";
+    std::cout << "max: " << cloud::max_sum << std::endl;
+    std::cout << "min: " << cloud::min_sum << std::endl;
 }
 
 void render_scene_parallel(std::ofstream& ofs, camera cam, scene world) {
