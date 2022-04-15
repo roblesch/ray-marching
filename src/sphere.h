@@ -44,19 +44,21 @@ public:
 
 class perlin_sphere : public sphere {
 public:
-    perlin_sphere(const vec3& cen, double r, PerlinNoise* perlin, shared_ptr<material> m) :
+    perlin_sphere(const vec3& cen, double r, PerlinNoise* perlin, double intensity, shared_ptr<material> m) :
         sphere(cen, r, std::move(m)) {
+        ints = intensity;
         pn = perlin;
     };
 
     double distance(const vec3& p) const override {
-        vec3 v = 5*p;
+        vec3 v = ints*p;
         double displacement = 0.1*pn->noise(v.x(), v.y(), v.z());
         return (p - center).length() - radius - displacement;
     };
 
 public:
     PerlinNoise* pn;
+    double ints;
 };
 
 #endif

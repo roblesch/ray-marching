@@ -29,6 +29,9 @@ inline double degrees_to_radians(double degrees) {
 
 /* === Render parameters */
 
+// Max depth
+const double MAXDEPTH = 1000;
+
 // Camera
 const double fov = 90;
 const double aspect_ratio = 1;
@@ -37,7 +40,7 @@ const vec3 camera_lookat(0, 0, -1);
 const vec3 camera_up(0, 1, 0);
 
 // Image
-const int image_width = 800;
+const int image_width = 400;
 const int image_height = static_cast<int>(image_width / aspect_ratio);
 
 // Anti aliasing

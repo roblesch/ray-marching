@@ -18,7 +18,7 @@ void write_color(std::ostream &out, vec3 pixel_color) {
         << static_cast<int>(255.999 * pixel_color.z()) << '\n';
 }
 
-scene cloud_scene() {
+scene cloud2d_scene() {
     // 1 perturbed cloud sphere
     scene world;
 
@@ -27,24 +27,56 @@ scene cloud_scene() {
             vec3(0.3,0.3,0.3)));
     world.add_light(light(
             vec3(-1,1,1),
-            vec3(0.4,0.4,0.4)));
+            vec3(0.6,0.6,0.6)));
 
-    double s1rad = 0.7;
-    double s2rad = 0.7;
+    double s1rad = 2;
+    double s2rad = 2;
 
     auto pn = new PerlinNoise(rand());
 
-    auto c1 = make_shared<gardner_cloud>(&world, 2*s1rad);
-    auto c2 = make_shared<perlin_cloud>(&world, 2*s2rad, pn);
+    auto c1 = make_shared<gardner_cloud_2d>(&world, 2*s1rad);
+    auto c2 = make_shared<perlin_cloud_2d>(&world, 2*s2rad, 2, pn);
 
-    auto s1 = make_shared<perlin_sphere>(
-            vec3(-0.9,0, -2), s1rad, pn, c1);
+    auto s1 = make_shared<sphere>(
+            vec3(-2.1,0, -5), s1rad, c1);
 
-    auto s2 = make_shared<perlin_sphere>(
-            vec3(0.9,0, -2), s2rad, pn, c2);
+    auto s2 = make_shared<sphere>(
+            vec3(2.1,0, -5), s2rad, c2);
 
     world.add_surface(s1);
     world.add_surface(s2);
+
+    return world;
+}
+
+scene cloud3d_scene() {
+    // 1 perturbed cloud sphere
+    scene world;
+
+    world.add_light(light(
+            vec3(1,1,1),
+            vec3(0.3,0.3,0.3)));
+    world.add_light(light(
+            vec3(-1,1,1),
+            vec3(0.6,0.6,0.6)));
+
+    double s1rad = 2;
+    double s2rad = 2;
+
+    auto pn = new PerlinNoise(rand());
+
+    auto c1 = make_shared<gardner_cloud_3d>(&world, 2*s1rad);
+    auto c2 = make_shared<perlin_cloud_3d>(&world, 2*s2rad, 2, pn);
+
+    auto s1 = make_shared<sphere>(
+            vec3(-2.1,0, -5), s1rad, c1);
+
+    auto s2 = make_shared<sphere>(
+            vec3(2.1,0, -5), s2rad, c2);
+
+    world.add_surface(s1);
+    world.add_surface(s2);
+
     return world;
 }
 
@@ -110,8 +142,7 @@ int main() {
                fov, aspect_ratio);
 
     // Scene
-//    scene world = diffuse_scene();
-    scene world = cloud_scene();
+    scene world = diffuse_scene();
 
     // Render
     std::ofstream ofs("image.ppm");
