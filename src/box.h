@@ -1,8 +1,3 @@
-
-#ifndef RAY_MARCHING_BOX_H
-#define RAY_MARCHING_BOX_H
-
-#endif //RAY_MARCHING_BOX_H
 #ifndef BOX_H
 #define BOX_H
 

@@ -1,8 +1,3 @@
-
-#ifndef RAY_MARCHING_CSG_H
-#define RAY_MARCHING_CSG_H
-
-#endif //RAY_MARCHING_BOX_H
 #ifndef CSG_H
 #define CSG_H
 
