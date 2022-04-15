@@ -76,6 +76,10 @@ public:
         return {random_double(), random_double(), random_double() };
     }
 
+    vec3 abs() const{
+        return {std::abs(e[0]), std::abs(e[1]),std:: abs(e[2])};
+    }
+
 public:
     double e[3];
 };
@@ -130,6 +134,18 @@ inline void vclamp(vec3 &v) {
     v.x(clamp(v.x()));
     v.y(clamp(v.y()));
     v.z(clamp(v.z()));
+}
+
+inline vec3 vmax(vec3 v, double t){
+    return { std::max(v.x(),t),
+             std::max(v.y(),t),
+             std::max(v.z(),t)};
+}
+
+inline vec3 vmin(vec3 v, double t){
+    return { std::min(v.x(),t),
+             std::min(v.y(),t),
+             std::min(v.z(),t)};
 }
 
 #endif
