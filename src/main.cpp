@@ -2,6 +2,7 @@
 #include <fstream>
 
 #include "camera.h"
+#include "cloud.h"
 #include "common.h"
 #include "diffuse.h"
 #include "scene.h"
@@ -15,6 +16,68 @@ void write_color(std::ostream &out, vec3 pixel_color) {
     out << static_cast<int>(255.999 * pixel_color.x()) << ' '
         << static_cast<int>(255.999 * pixel_color.y()) << ' '
         << static_cast<int>(255.999 * pixel_color.z()) << '\n';
+}
+
+scene cloud2d_scene() {
+    // 1 perturbed cloud sphere
+    scene world;
+
+    world.add_light(light(
+            vec3(1,1,1),
+            vec3(0.3,0.3,0.3)));
+    world.add_light(light(
+            vec3(-1,1,1),
+            vec3(0.6,0.6,0.6)));
+
+    double s1rad = 2;
+    double s2rad = 2;
+
+    auto pn = new PerlinNoise(rand());
+
+    auto c1 = make_shared<gardner_cloud_2d>(&world, 2*s1rad);
+    auto c2 = make_shared<perlin_cloud_2d>(&world, 2*s2rad, 2, pn);
+
+    auto s1 = make_shared<sphere>(
+            vec3(-2.1,0, -5), s1rad, c1);
+
+    auto s2 = make_shared<sphere>(
+            vec3(2.1,0, -5), s2rad, c2);
+
+    world.add_surface(s1);
+    world.add_surface(s2);
+
+    return world;
+}
+
+scene cloud3d_scene() {
+    // 1 perturbed cloud sphere
+    scene world;
+
+    world.add_light(light(
+            vec3(1,1,1),
+            vec3(0.3,0.3,0.3)));
+    world.add_light(light(
+            vec3(-1,1,1),
+            vec3(0.6,0.6,0.6)));
+
+    double s1rad = 2;
+    double s2rad = 2;
+
+    auto pn = new PerlinNoise(rand());
+
+    auto c1 = make_shared<gardner_cloud_3d>(&world, 2*s1rad);
+    auto c2 = make_shared<perlin_cloud_3d>(&world, 2*s2rad, 2, pn);
+
+    auto s1 = make_shared<sphere>(
+            vec3(-2.1,0, -5), s1rad, c1);
+
+    auto s2 = make_shared<sphere>(
+            vec3(2.1,0, -5), s2rad, c2);
+
+    world.add_surface(s1);
+    world.add_surface(s2);
+
+    return world;
 }
 
 scene diffuse_scene() {
@@ -36,8 +99,7 @@ scene diffuse_scene() {
             16);
 
     auto s1 = make_shared<sphere>(
-            vec3(-1.1,0,-2), 0.5,
-            make_shared<flat>(vec3(0.2, 0.5, 0.1)));
+            vec3(-1.1,0, -2), 0.5, make_shared<flat>());
     auto s2 = make_shared<sphere>(
             vec3(0, 0, -2), 0.5,
             make_shared<normals>());

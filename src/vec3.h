@@ -11,6 +11,12 @@ class vec3 {
 public:
     vec3() : e{0,0,0} {};
 
+    vec3(double e0) {
+        e[0] = e0;
+        e[1] = e0;
+        e[2] = e0;
+    }
+
     vec3(double e0, double e1, double e2) {
         e[0] = e0;
         e[1] = e1;
@@ -108,6 +114,10 @@ inline vec3 operator*(const vec3 &v, double t) {
 
 inline vec3 operator/(vec3 v, double t) {
     return (1 / t) * v;
+}
+
+inline vec3 operator/(double t, vec3 v) {
+    return { t / v.x(), t / v.y(), t / v.z() };
 }
 
 inline double dot(const vec3 &u, const vec3 &v) {
