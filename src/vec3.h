@@ -142,20 +142,4 @@ inline void vclamp(vec3 &v) {
     v.z(clamp(v.z()));
 }
 
-inline vec3 min(const vec3 &u, const vec3 &v) {
-    return {
-        std::min(u.x(), v.x()),
-        std::min(u.y(), v.y()),
-        std::min(u.z(), v.z())
-    };
-}
-
-inline vec3 max(const vec3 &u, const vec3 &v) {
-    return {
-            std::max(u.x(), v.x()),
-            std::max(u.y(), v.y()),
-            std::max(u.z(), v.z())
-    };
-}
-
 #endif
