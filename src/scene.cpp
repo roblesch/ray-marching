@@ -22,7 +22,7 @@ double scene::distance_estimator(vec3 p) {
 bool scene::march(const ray& r, hit_record& rec) {
     // March along a ray by the distance to the nearest surface
     double t = 0;
-    while(t < 10) {
+    while(t < MAXDEPTH) {
         vec3 p = r.at(t);
         double dist = distance_estimator(p);
         if (near_zero(dist) || dist < 0) {
@@ -56,7 +56,10 @@ vec3 scene::ray_color(const ray& r) {
     hit_record rec;
     if (march(r, rec))
         return rec.mat_ptr->color(r, rec.p, rec.N, lights);
-    vec3 unit_direction = normalize(r.direction());
-    auto t = 0.5*(unit_direction.y() + 1.0);
+    return background_color(r);
+}
+
+vec3 scene::background_color(const ray &r) {
+    auto t = 0.5*(r.direction().y() + 1.0);
     return (1.0-t)*vec3(1.0, 1.0, 1.0) + t*vec3(0.5, 0.7, 1.0);
 }

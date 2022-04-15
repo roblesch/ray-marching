@@ -19,6 +19,7 @@ public:
     bool march(const ray& r, hit_record& rec);
     vec3 normal(const vec3& p);
     vec3 ray_color(const ray& r);
+    static vec3 background_color(const ray& r);
 
 public:
     std::vector<shared_ptr<surface>> surface_list{};
