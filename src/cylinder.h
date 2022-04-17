@@ -1,6 +1,4 @@
-//
-// Created by mathp on 4/17/2022.
-//
+
 #ifndef CYLINDER_H
 #define CYLINDER_H
 
@@ -14,16 +12,17 @@ using std::min;
 
 class cylinder : public surface {
 public:
-    cylinder(const vec3& cen, const vec3& dim, shared_ptr<material> m) : surface(std::move(m)), center(cen), dimensions(dim) {};
+    cylinder(const vec3& cen, const float& he, const float& rad, shared_ptr<material> m) : surface(std::move(m)), center(cen), height(he), radius(rad) {};
 
-    double distance(const vec3& p, const float& h, const float& r) const override {
-        vec3 q = (p - center).abs() - dimensions;
-        return min(max(q.x(), max(q.y(),q.z())), 0.0) + (vmax(q, 0.0)).length();
+    double distance(const vec3& p) const override {
+        vec2 xzVec = {p.x()-center.x(), p.z()-center.z()};
+        vec2 d = vec2(xzVec.length(), p.y()-center.y()).abs() - vec2(radius, height);
+        vec2 newD = {max(d.x(), 0.0), max(d.y(), 0.0)};
+        return min(max(d.x(), d.y()), 0.0) + newD.length();
     };
 
 public:
     vec3 center;
-    vec3 dimensions;
     float height;
     float radius;
 };
@@ -31,3 +30,4 @@ public:
 
 
 #endif
+
