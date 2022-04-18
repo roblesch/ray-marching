@@ -8,9 +8,6 @@
 #include "scene.h"
 #include "sphere.h"
 #include "box.h"
-#include "cylinder.h"
-#include "triPrism.h"
-#include "pyramid.h"
 #include "csgObject.h"
 
 void write_color(std::ostream &out, vec3 pixel_color) {
@@ -112,15 +109,8 @@ scene diffuse_scene() {
             vec3(1.1, 0, -2), 0.5, 9.0, 0.11, d1);
     auto box1 = make_shared<box>(
             vec3(0, 0, -2), vec3(0.20, 0.20,0.80), make_shared<normals>());
-    auto triPrism1 = make_shared<triPrism>(
-            vec3(0, 0, -2), vec2(0.4, 0.8), make_shared<normals>());
-    auto cylinder1 = make_shared<cylinder>(
-            vec3(0,0,-2), 0.9, 0.1, make_shared<normals>());
-    auto pyramid1 = make_shared<pyramid>(
-            vec3(0,0,-2), 0.7, make_shared<normals>());
-    //The cylinder subtraction isn't visible bc of camera orientation but if you raise the camera angle you can see it
     auto csg1 = make_shared<csgObject>(
-            pyramid1, s2, SUBTRACT, d1);
+            box1, s2, SUBTRACT, d1);
 
     world.add_surface(s1);
     world.add_surface(s3);
