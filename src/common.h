@@ -28,7 +28,6 @@ inline double degrees_to_radians(double degrees) {
 
 // Common includes
 #include "vec3.h"
-#include "vec2.h"
 #include "ray.h"
 
 /* === Render parameters */

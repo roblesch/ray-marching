@@ -113,7 +113,7 @@ scene diffuse_scene() {
     auto box1 = make_shared<box>(
             vec3(0, 0, -2), vec3(0.20, 0.20,0.80), make_shared<normals>());
     auto triPrism1 = make_shared<triPrism>(
-            vec3(0, 0, -2), vec2(0.4,0.80), make_shared<normals>());
+            vec3(0, 0, -2),0.4,0.80, make_shared<normals>());
     auto cylinder1 = make_shared<cylinder>(
             vec3(0, 0, -2), 0.9, 0.1, make_shared<normals>());
     auto pyramid1 = make_shared<pyramid>(
