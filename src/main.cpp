@@ -119,7 +119,7 @@ scene diffuse_scene() {
     auto pyramid1 = make_shared<pyramid>(
             vec3(0,0,-2), 0.7, make_shared<normals>());
     auto csg1 = make_shared<csgObject>(
-            pyramid1, s2, UNION, true, 0.1, d1);
+            pyramid1, s2, UNION, true, 0.4, d1);
 
 
     //world.add_surface(s1);

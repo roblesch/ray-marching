@@ -32,15 +32,15 @@ public:
             double d = 1e10;
             double dt;
             if(mode == UNION){
-                dt = smoothUnion(d1,d2, 0.45);
+                dt = smoothUnion(d1,d2, smoothLevel);
                 return std::min(d, dt);
             }
             else if(mode == SUBTRACT){
-                dt = smoothSubtraction(d1,d2, 0.75);
+                dt = smoothSubtraction(d1,d2, smoothLevel);
                 return std::min(d, dt);
             }
             else{
-                dt = smoothIntersection(d1,d2, 0.15);
+                dt = smoothIntersection(d1,d2, smoothLevel);
                 return std::min(d, dt);
             }
 
