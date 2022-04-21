@@ -11,6 +11,7 @@
 #include "cylinder.h"
 #include "triPrism.h"
 #include "pyramid.h"
+#include "mandelbulb.h"
 #include "csgObject.h"
 
 void write_color(std::ostream &out, vec3 pixel_color) {
@@ -111,20 +112,22 @@ scene diffuse_scene() {
     auto s3 = make_shared<perturbed_sphere>(
             vec3(1.1, 0, -2), 0.5, 9.0, 0.11, d1);
     auto box1 = make_shared<box>(
-            vec3(0, 0, -2), vec3(0.20, 0.20,0.80), make_shared<normals>());
+            vec3(0, 0, -2), vec3(0.6, 0.6,0.6), make_shared<normals>());
     auto triPrism1 = make_shared<triPrism>(
             vec3(0, 0, -2),0.4,0.80, make_shared<normals>());
     auto cylinder1 = make_shared<cylinder>(
             vec3(0, 0, -2), 0.9, 0.1, make_shared<normals>());
     auto pyramid1 = make_shared<pyramid>(
-            vec3(0,0,-2), 0.7, make_shared<normals>());
-    auto csg1 = make_shared<csgObject>(
-            pyramid1, s2, SUBTRACT, d1);
+            vec3(0,0,-2), 0.9,  make_shared<normals>());
+    auto mandelbulb1 = make_shared<mandelbulb> (
+            vec3(0.0, 0.0, -1.7), make_shared<normals>());
+    //auto csg1 = make_shared<csgObject>(
+    //        mandelbulb1, box1, SUBTRACT, d1);
 
     world.add_surface(s1);
     world.add_surface(s3);
-    world.add_surface(csg1);
-
+    //world.add_surface(box1);
+    world.add_surface(mandelbulb1);
     return world;
 }
 
