@@ -2,7 +2,6 @@
 #ifndef PYRAMID_H
 #define PYRAMID_H
 
-
 #include <utility>
 
 #include "common.h"
@@ -17,7 +16,6 @@ public:
 
     double distance(const vec3& p) const override {
         float m = height * height + 0.25;
-        //vec2 xzVec = {p.x()-center.x(), p.z()-center.z()};
         float xzVecX = std::abs(p.x()-center.x());
         float xzVecZ = std::abs(p.z()-center.z());
         if (xzVecX < xzVecZ) {
@@ -60,7 +58,5 @@ public:
     vec3 center;
     float height;
 };
-
-
 
 #endif //RAY_MARCHING_PYRAMID_H

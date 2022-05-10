@@ -18,11 +18,13 @@ public:
         return min(max(q.x(), max(q.y(),q.z())), 0.0) + (vmax(q, 0.0)).length();
     };
 
+    static double staticdistance(const vec3& p, const vec3& dims) {
+        vec3 q = (p).abs() - dims;
+        return min(max(q.x(), max(q.y(),q.z())), 0.0) + (vmax(q, 0.0)).length();
+    };
 public:
     vec3 center;
     vec3 dimensions;
 };
 
-
-
-#endif
+#endif //BOX_H

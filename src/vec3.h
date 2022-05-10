@@ -158,4 +158,4 @@ inline vec3 vmin(vec3 v, double t){
              std::min(v.z(),t)};
 }
 
-#endif
+#endif //VEC3_H

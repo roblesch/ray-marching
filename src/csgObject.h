@@ -34,6 +34,4 @@ public:
     const int mode;
 };
 
-
-
-#endif
+#endif //CSG_H

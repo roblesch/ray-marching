@@ -43,11 +43,11 @@ const vec3 camera_lookat(0, 0, -1);
 const vec3 camera_up(0, 1, 0);
 
 // Image
-const int image_width = 400;
+const int image_width = 800;
 const int image_height = static_cast<int>(image_width / aspect_ratio);
 
 // Anti aliasing
-const int rays_per_pixel = 1;
+const int rays_per_pixel = 15;
 
 // Parallelization
 const bool RENDER_PARALLEL = false;

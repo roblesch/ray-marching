@@ -23,4 +23,4 @@ private:
 	double grad(int hash, double x, double y, double z);
 };
 
-#endif
+#endif //PERLINNOISE_H
