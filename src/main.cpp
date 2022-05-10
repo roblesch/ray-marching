@@ -90,12 +90,18 @@ scene diffuse_scene() {
     // 3 spheres with flat, normals, and diffuse shading
     scene world;
 
+    double rad = 1.25;
+    auto pn = new PerlinNoise(rand());
+
     world.add_light(light(
             vec3(1,1,1),
             vec3(0.3,0.3,0.3)));
     world.add_light(light(
             vec3(-1,1,1),
             vec3(0.4,0.4,0.4)));
+
+    auto c1 = make_shared<gardner_cloud_3d>(&world, 2*rad);
+    auto c2 = make_shared<perlin_cloud_3d>(&world, 2*rad, 2, pn);
 
     auto d1 = make_shared<diffuse>(
             vec3(0.3,0.1,0.1),
@@ -105,29 +111,39 @@ scene diffuse_scene() {
             16);
 
     auto s1 = make_shared<sphere>(
-            vec3(-1.1,0, -2), 0.5, make_shared<flat>());
+            vec3(5.4,0, -9), rad, c1);
+    auto s5 = make_shared<sphere>(
+            vec3(-5.4,0, -9), rad, c2);
+
     auto s2 = make_shared<sphere>(
-            vec3(0, 0, -2), 0.5,
-            make_shared<normals>());
+            vec3(0, 0, -7), rad,
+            d1);
+
     auto s3 = make_shared<perturbed_sphere>(
-            vec3(1.1, 0, -2), 0.5, 9.0, 0.11, d1);
+            vec3(2.7, 0, -8), rad, 9.0, 0.05, make_shared<normals>());
+
+    auto s4 = make_shared<perlin_sphere>(
+            vec3(-2.7, 0, -8), rad, pn, 5, make_shared<normals>());
+
     auto box1 = make_shared<box>(
-            vec3(0, 0, -2), vec3(0.6, 0.6,0.6), make_shared<normals>());
+            vec3(0, 0, -6.5), vec3(0.75, 0.75, 2), make_shared<normals>());
+
     auto triPrism1 = make_shared<triPrism>(
             vec3(0, 0, -2),0.4,0.80, make_shared<normals>());
     auto cylinder1 = make_shared<cylinder>(
-            vec3(0, 0, -2), 0.9, 0.1, make_shared<normals>());
+            vec3(0, 0, -2.5), 0.9, 0.25, make_shared<normals>());
     auto pyramid1 = make_shared<pyramid>(
-            vec3(0,0,-2), 0.9,  make_shared<normals>());
-    auto mandelbulb1 = make_shared<mandelbulb> (
-            vec3(0.0, 0.0, -1.7), make_shared<normals>());
-    //auto csg1 = make_shared<csgObject>(
-    //        mandelbulb1, box1, SUBTRACT, d1);
+            vec3(0,0,-2), 0.7, make_shared<normals>());
+
+    auto csg1 = make_shared<csgObject>(
+            box1, s2, SUBTRACT, d1);
 
     world.add_surface(s1);
+    world.add_surface(csg1);
     world.add_surface(s3);
-    //world.add_surface(box1);
-    world.add_surface(mandelbulb1);
+    world.add_surface(s4);
+    world.add_surface(s5);
+
     return world;
 }
 
